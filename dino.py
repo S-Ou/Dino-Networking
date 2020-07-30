@@ -108,6 +108,10 @@ class Game(pyglet.window.Window):
                 "bwidth": -1,
                 "bypos": -1,
             })
+
+        inputs.update({
+                "gspeed": self.gamespeed
+            })
         
         return inputs
 
@@ -139,6 +143,9 @@ class Game(pyglet.window.Window):
                 self.push_handlers(handler)
                 self.eventstacksize += 1
         self.push_handlers(self.keyboard)
+
+        self.clouds = False
+        self.birds = False
 
         self.score = 0
         self.gameovertext = 0
@@ -251,19 +258,20 @@ class Game(pyglet.window.Window):
 
             if self.wait >= self.distancewait:
                 if random.randint(1, 30) == 16:
-                    if random.randint(1, 4) == 1:
+                    if random.randint(1, 4) == 1 and self.birds:
                         self.gameobjects.append(bird.Bird(x=2000, y=random.choice(self.birdlocations), batch=self.enemybatch))
                     else:
                         self.gameobjects.append(cactus.Cactus(x=2000, y=0, batch=self.enemybatch))
                     self.wait = 0
             else: self.wait += 1
 
-            if self.cloudwait >= self.cloudwaittime:
-                # if random.randint(1, 300) == 16:
-                self.gameobjects.append(cloud.Cloud(x=1440, y=random.randint(150, 315), batch=self.backgroundbatch))
-                self.cloudwait = 0
-                self.cloudwaittime = random.randint(100, 900)
-            else: self.cloudwait += 1
+            if self.clouds:
+                if self.cloudwait >= self.cloudwaittime:
+                    # if random.randint(1, 300) == 16:
+                    self.gameobjects.append(cloud.Cloud(x=1440, y=random.randint(150, 315), batch=self.backgroundbatch))
+                    self.cloudwait = 0
+                    self.cloudwaittime = random.randint(100, 900)
+                else: self.cloudwait += 1
 
             if c and not self.collided:
                 self.collided = True
@@ -343,18 +351,21 @@ class Worker(object):
         fitness = 0
 
         while pyglet.app.windows:
-            actions = net.activate([random.randint(1, 10) for i in range(12)])
-            # print(actions)
-            # print([bool(round(i, 0)) for i in actions])
-
             pyglet.clock.tick()
 
             for window in pyglet.app.windows:
+                # actions = net.activate([random.randint(1, 10) for i in range(12)])
+                # print(window.dinoinputs().values())
+                actions = net.activate(list(window.dinoinputs().values()))
+                # print(actions)
+                # print([bool(round(i, 0)) for i in actions])
+
                 window.changeinput([bool(round(i, 0)) for i in actions])
                 # print(1, window.cinput)
 
                 # fitness = window.score
                 fitness = window.successcount
+                # fitness = window.score * window.successcount
 
                 # print(window.nninput)
 
@@ -376,16 +387,16 @@ if __name__ == "__main__":
 
         p = neat.Population(config)
 
-        pe = neat.ParallelEvaluator(4, eval_genomes)
+        pe = neat.ParallelEvaluator(2, eval_genomes)
 
 
-        # p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-12')
+        # p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-9')
         p.add_reporter(neat.StdOutReporter(True))
         stats = neat.StatisticsReporter()
         p.add_reporter(stats)
         p.add_reporter(neat.Checkpointer(1))
 
-        winner = p.run(pe.evaluate, 100)
+        winner = p.run(pe.evaluate, 25)
         # winner = p.run(eval_genomes, 10)
 
         print('\nBest genome:\n{!s}'.format(winner))

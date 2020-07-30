@@ -37,8 +37,8 @@ class Player(physicalobject.PhysicalObject):
 		self.collided = False
 		self.xbuffer = 15
 
-		self.cactidistance = None
-		self.birddistance = None
+		self.cactidistance = -1
+		self.birddistance = -1
 
 		self.key_handler = key.KeyStateHandler()
 		self.event_handlers = [self, self.key_handler]

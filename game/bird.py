@@ -23,7 +23,7 @@ class Bird(physicalobject.PhysicalObject):
 			return
 
 		us = 1/120  # update speed
-		ud = us / dt
+		ud = us / dt / dt
 
 		self.velocityx = (-1 * basespeed * gamespeed - 100) * ud
 

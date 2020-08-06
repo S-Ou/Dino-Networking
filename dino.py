@@ -64,7 +64,7 @@ class Game(pyglet.window.Window):
         self.cloudwaittime = 100
         self.cloudwait = 0
 
-        self.basespeed = 2000
+        self.basespeed = 30
         self.gamespeed = 1
         self.gameaccel = 0.0001
 
@@ -263,7 +263,7 @@ class Game(pyglet.window.Window):
                     else:
                         self.gameobjects.append(cactus.Cactus(x=2000, y=0, batch=self.enemybatch))
                     self.wait = 0
-            else: self.wait += 1
+            else: self.wait += 2 * ud
 
             if self.clouds:
                 if self.cloudwait >= self.cloudwaittime:
@@ -271,7 +271,7 @@ class Game(pyglet.window.Window):
                     self.gameobjects.append(cloud.Cloud(x=1440, y=random.randint(150, 315), batch=self.backgroundbatch))
                     self.cloudwait = 0
                     self.cloudwaittime = random.randint(100, 900)
-                else: self.cloudwait += 1
+                else: self.cloudwait += ud
 
             if c and not self.collided:
                 self.collided = True
@@ -378,7 +378,7 @@ class Worker(object):
 
 
 if __name__ == "__main__":
-    pc = False
+    pc = True
 
     if not pc:
         config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction, 
@@ -387,7 +387,7 @@ if __name__ == "__main__":
 
         p = neat.Population(config)
 
-        pe = neat.ParallelEvaluator(2, eval_genomes)
+        pe = neat.ParallelEvaluator(4, eval_genomes)
 
 
         # p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-9')
@@ -429,6 +429,10 @@ if __name__ == "__main__":
         pyglet.clock.schedule_interval(gameinstance.update, 1 / 120.0)
         while pyglet.app.windows:
             pyglet.clock.tick()
+
+            # for i in range(10000):
+            #     random.randint(1, 10000)
+
             for window in pyglet.app.windows:
                 window.switch_to()
                 window.dispatch_events()

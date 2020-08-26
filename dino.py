@@ -354,20 +354,13 @@ class Worker(object):
             pyglet.clock.tick()
 
             for window in pyglet.app.windows:
-                # actions = net.activate([random.randint(1, 10) for i in range(12)])
-                # print(window.dinoinputs().values())
                 actions = net.activate(list(window.dinoinputs().values()))
-                # print(actions)
-                # print([bool(round(i, 0)) for i in actions])
 
                 window.changeinput([bool(round(i, 0)) for i in actions])
-                # print(1, window.cinput)
-
+                
                 # fitness = window.score
                 fitness = window.successcount
                 # fitness = window.score * window.successcount
-
-                # print(window.nninput)
 
                 window.switch_to()
                 window.dispatch_events()
@@ -378,7 +371,7 @@ class Worker(object):
 
 
 if __name__ == "__main__":
-    pc = True
+    pc = False
 
     if not pc:
         config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction, 
@@ -387,7 +380,7 @@ if __name__ == "__main__":
 
         p = neat.Population(config)
 
-        pe = neat.ParallelEvaluator(4, eval_genomes)
+        pe = neat.ParallelEvaluator(8, eval_genomes)
 
 
         # p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-9')
@@ -396,7 +389,7 @@ if __name__ == "__main__":
         p.add_reporter(stats)
         p.add_reporter(neat.Checkpointer(1))
 
-        winner = p.run(pe.evaluate, 25)
+        winner = p.run(pe.evaluate, 15)
         # winner = p.run(eval_genomes, 10)
 
         print('\nBest genome:\n{!s}'.format(winner))
@@ -419,10 +412,13 @@ if __name__ == "__main__":
              1:  'Duck',
         }
 
-        # visualize.draw_net(config, winner, True)
-        visualize.draw_net(config, winner, True, node_names=node_names)
-        visualize.plot_stats(stats, ylog=False, view=True)
-        visualize.plot_species(stats, view=True)
+        try:
+            # visualize.draw_net(config, winner, True)
+            visualize.draw_net(config, winner, True, node_names=node_names)
+            visualize.plot_stats(stats, ylog=False, view=True)
+            visualize.plot_species(stats, view=True)
+        except Exception as e:
+            print('')
 
     else:
         gameinstance = Game(1440, 375, True)
@@ -430,7 +426,7 @@ if __name__ == "__main__":
         while pyglet.app.windows:
             pyglet.clock.tick()
 
-            # for i in range(10000):
+            # for i in range(1000):
             #     random.randint(1, 10000)
 
             for window in pyglet.app.windows:

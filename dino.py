@@ -233,7 +233,9 @@ class Game(pyglet.window.Window):
         if not self.gameover:
             us = 1/120  # update speed
             ud = us / dt
-            scoreadd = self.gamespeed * us * 10
+            # print(1 / dt)
+            scoreadd = self.gamespeed * dt * 10
+            # scoreadd = self.gamespeed * us * 10
             self.score += scoreadd
             self.scoretext.text = f"{int(round(self.score, 0)):05d}"
 
@@ -371,7 +373,7 @@ class Worker(object):
 
 
 if __name__ == "__main__":
-    pc = False
+    pc = True
 
     if not pc:
         config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction, 
@@ -380,7 +382,7 @@ if __name__ == "__main__":
 
         p = neat.Population(config)
 
-        pe = neat.ParallelEvaluator(8, eval_genomes)
+        pe = neat.ParallelEvaluator(2, eval_genomes)
 
 
         # p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-9')

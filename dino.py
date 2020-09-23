@@ -383,6 +383,7 @@ if __name__ == "__main__":
         p = neat.Population(config)
 
         pe = neat.ParallelEvaluator(2, eval_genomes)
+        # No. of parallel instances ^
 
 
         # p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-9')
@@ -392,7 +393,7 @@ if __name__ == "__main__":
         p.add_reporter(neat.Checkpointer(1))
 
         winner = p.run(pe.evaluate, 15)
-        # winner = p.run(eval_genomes, 10)
+        # Generation Size           ^
 
         print('\nBest genome:\n{!s}'.format(winner))
 

@@ -2,6 +2,7 @@
 fitness_criterion     = mean
 fitness_threshold     = 200
 pop_size              = 4
+# Population size       ^ 
 reset_on_extinction   = True
 
 [DefaultGenome]

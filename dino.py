@@ -373,7 +373,7 @@ class Worker(object):
 
 
 if __name__ == "__main__":
-    pc = True
+    pc = False
 
     if not pc:
         config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction, 
@@ -382,7 +382,7 @@ if __name__ == "__main__":
 
         p = neat.Population(config)
 
-        pe = neat.ParallelEvaluator(2, eval_genomes)
+        pe = neat.ParallelEvaluator(4, eval_genomes)
         # No. of parallel instances ^
 
 
@@ -392,7 +392,7 @@ if __name__ == "__main__":
         p.add_reporter(stats)
         p.add_reporter(neat.Checkpointer(1))
 
-        winner = p.run(pe.evaluate, 15)
+        winner = p.run(pe.evaluate, 5)
         # Generation Size           ^
 
         print('\nBest genome:\n{!s}'.format(winner))

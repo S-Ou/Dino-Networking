@@ -7,7 +7,7 @@ pyglet - `pip install pyglet`
 
 NEAT - `pip install neat-python`
 
-
+---
 
 Optional libraries for logs:
 

@@ -7,7 +7,7 @@ class Game(pyglet.window.Window):
     # gamewindow = pyglet.window.Window(1200, 675)
 
     def __init__(self, xs, ys, playercontrolled):
-        super().__init__(width=xs, height=ys)
+        super().__init__(width=xs, height=ys, caption="Chrome Dino x Neural Network")
         self.dinobatch = pyglet.graphics.Batch()
         self.enemybatch = pyglet.graphics.Batch()
         self.backgroundbatch = pyglet.graphics.Batch()

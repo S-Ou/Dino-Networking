@@ -12,6 +12,6 @@ NEAT - `pip install neat-python`
 Optional libraries for logs:
 
 
-graphviz
+graphviz - Must both `pip install graphviz` and download from graphviz.org, then type `dot -c` in cmd (Admin)
 
-matplotlib
+matplotlib - `pip install matplotlib`

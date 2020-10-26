@@ -2,6 +2,7 @@ import pyglet, random, math, copy, time, neat
 from pyglet.window import key
 from game import player, cactus, resources, bird, floor, cloud
 import visualize
+import traceback
 
 class Game(pyglet.window.Window):
     # gamewindow = pyglet.window.Window(1200, 675)
@@ -382,7 +383,7 @@ if __name__ == "__main__":
 
         p = neat.Population(config)
 
-        pe = neat.ParallelEvaluator(4, eval_genomes)
+        pe = neat.ParallelEvaluator(2, eval_genomes)
         # No. of parallel instances ^
 
 
@@ -392,7 +393,7 @@ if __name__ == "__main__":
         p.add_reporter(stats)
         p.add_reporter(neat.Checkpointer(1))
 
-        winner = p.run(pe.evaluate, 5)
+        winner = p.run(pe.evaluate, 1)
         # Generation Size           ^
 
         print('\nBest genome:\n{!s}'.format(winner))
@@ -421,7 +422,8 @@ if __name__ == "__main__":
             visualize.plot_stats(stats, ylog=False, view=True)
             visualize.plot_species(stats, view=True)
         except Exception as e:
-            print('')
+            print(e)
+            traceback.print_exc()
 
     else:
         gameinstance = Game(1440, 375, True)
